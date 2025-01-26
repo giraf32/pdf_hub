@@ -1,9 +1,13 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:pdf_hub/app/app_const.dart';
 import 'package:pdf_hub/app/data/db_app/db_services_folder.dart';
 import 'package:pdf_hub/app/data/db_app/db_services_pdf.dart';
 import 'package:pdf_hub/app/data/db_app/init_db.dart';
 import 'package:pdf_hub/app/domain/provider/provider_folder.dart';
+import 'package:pdf_hub/app/ui/page/app_with_error.dart';
 import 'package:pdf_hub/app_router/app_router.dart';
 import 'package:pdf_hub/di/app_depends.dart';
 import 'package:provider/provider.dart';
@@ -13,35 +17,44 @@ import 'app/domain/provider/provider_pdf.dart';
 
 //String settingsKeyFirstPages = 'firstPages';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+void main() {
+ 
+  runZonedGuarded(() async {
+     WidgetsFlutterBinding.ensureInitialized();
   Database? db = await InitDb.create().database;
   final dbServicesFolder = DbServicesFolder(db: db!);
   final dbServicesPdf = DbServicesPdf(db: db);
 
-  final dependsRepo =
-      AppDepends(dbApiFolder: dbServicesFolder, dbApiPdf: dbServicesPdf);
- await dependsRepo.init(
-    onError: (name, error, stackTrace) {
-      throw '$name: $error: $stackTrace';
-    },
-  );
-  runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (context) => ProviderPDF(pdfRepository: dependsRepo.pdfRepo),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ProviderFolder(folderRepository: dependsRepo.folderRepo),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ProviderFolderPdf(pdfRepository: dependsRepo.folderPdfRepo),
-        )
-      ],
-      child: const MyApp(),
-    ),
-  );
+    final dependsRepo =
+        AppDepends(dbApiFolder: dbServicesFolder, dbApiPdf: dbServicesPdf);
+    await dependsRepo.init(
+      onError: (name, error, stackTrace) {
+        throw '$name: $error: $stackTrace';
+      },
+    );
+    runApp(
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) =>
+                ProviderPDF(pdfRepository: dependsRepo.pdfRepo),
+          ),
+          ChangeNotifierProvider(
+            create: (context) =>
+                ProviderFolder(folderRepository: dependsRepo.folderRepo),
+          ),
+          ChangeNotifierProvider(
+            create: (context) =>
+                ProviderFolderPdf(pdfRepository: dependsRepo.folderPdfRepo),
+          )
+        ],
+        child: const MyApp(),
+      ),
+    );
+  }, (error, stack) {
+    log(error.toString(), stackTrace: stack, error: error);
+    runApp(AppWithError(message: '$error,$stack'));
+  });
 }
 
 class MyApp extends StatefulWidget {
