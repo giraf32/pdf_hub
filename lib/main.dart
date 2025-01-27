@@ -17,16 +17,17 @@ import 'app/domain/provider/provider_pdf.dart';
 
 //String settingsKeyFirstPages = 'firstPages';
 
-void main() {
- 
+void main() async{
   runZonedGuarded(() async {
-     WidgetsFlutterBinding.ensureInitialized();
-  Database? db = await InitDb.create().database;
-  final dbServicesFolder = DbServicesFolder(db: db!);
-  final dbServicesPdf = DbServicesPdf(db: db);
+    //  WidgetsFlutterBinding.ensureInitialized();
+    await _initApp();
+    Database? db = await InitDb.create().database;
+    final dbServicesFolder = DbServicesFolder(db: db!);
+    final dbServicesPdf = DbServicesPdf(db: db);
 
     final dependsRepo =
         AppDepends(dbApiFolder: dbServicesFolder, dbApiPdf: dbServicesPdf);
+
     await dependsRepo.init(
       onError: (name, error, stackTrace) {
         throw '$name: $error: $stackTrace';
@@ -55,6 +56,14 @@ void main() {
     log(error.toString(), stackTrace: stack, error: error);
     runApp(AppWithError(message: '$error,$stack'));
   });
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.allowFirstFrame();
+  });
+}
+
+Future<void> _initApp() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding.instance.deferFirstFrame();
 }
 
 class MyApp extends StatefulWidget {

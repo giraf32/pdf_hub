@@ -42,8 +42,9 @@ class AppDepends {
       onError("mySharedPreferences", error, stackTrace);
     }
     try {
+      // throw 'myError';
       pdfRepo = PdfRepository(dbServicesPdf: dbApiPdf);
-    //  throw ('myError');
+     
     } on Object catch (error, stackTrace) {
       onError("pdfRepo", error, stackTrace);
     }

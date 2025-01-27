@@ -1,4 +1,3 @@
-
 import 'package:pdf_hub/app/domain/db_api_folder.dart';
 import 'package:pdf_hub/app/domain/model/folder_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -14,12 +13,13 @@ class DbServicesFolder implements DbApiFolder {
   @override
   Future<void> deleteFolderDb({required int? id}) async {
     //final db = await initDb.database;
+
     await db.delete('folder', where: 'id = ?', whereArgs: [id]);
   }
 
   @override
   Future<List<FolderModel?>> getListFolderDb() async {
-   // final db = await initDb.database;
+    // final db = await initDb.database;
     final List<Map<String, dynamic>> folderMaps = await db.query('folder');
 
     return List.generate(folderMaps.length, (index) {
@@ -40,7 +40,7 @@ class DbServicesFolder implements DbApiFolder {
   @override
   Future<void> updateFolderDb({required FolderModel folder}) async {
     //final db = await initDb.database;
-  await db.update('folder', folder.toMapPDF(),
+    await db.update('folder', folder.toMapPDF(),
         where: 'id = ?', whereArgs: [folder.id]);
   }
 }
