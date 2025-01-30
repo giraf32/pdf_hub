@@ -6,37 +6,20 @@ import 'package:pdf_hub/app/domain/pdf_api.dart';
 import '../../../utility/pdf_function.dart';
 import '../../ui/widget/widget_pdf_file/show_alert_dialog_pdf.dart';
 
-enum NotifierState { initial, loading, loaded }
-
-//enum NotifierStateListAddPdfFolder { initial, loading, loaded }
-
 class ProviderPDF extends ChangeNotifier {
   ProviderPDF({required this.pdfRepository});
   final PdfApi pdfRepository;
 
-  NotifierState _notifierState = NotifierState.initial;
-
-  NotifierState get notifierState => _notifierState;
-
-  void _setNotifierState(NotifierState state) {
-    _notifierState = state;
-    notifyListeners();
-  }
-
-  // final pdfRepository =
-  //     PdfRepository(dbServicesPdf: DbServicesPdf(InitDb.create()));
   var pdfModelListHistory = <PdfModel?>[];
 
   bool changeMenuItemFavourites = false;
 
   Future<void> addListPdfFileFromDeviceStorage(BuildContext context) async {
     try {
-      // _setNotifierState(NotifierState.loading);
       final listPdfModelsStorage =
           await pdfRepository.getPdfListDeviceStorage();
 
       if (listPdfModelsStorage == null) {
-        _setNotifierState(NotifierState.loaded);
         return;
       }
       final pdfListModelDb = await pdfRepository.getPdfListModelFromDbHistory();
@@ -52,8 +35,7 @@ class ProviderPDF extends ChangeNotifier {
 
       await updatePdfListModelHistory();
     } catch (e, s) {
-      log('Error addOpenPdf: $e');
-      log('Error addOpenPdf: $s');
+      log('Error addListPdfFileFromDeviceStorage: $e', stackTrace: s);
     }
   }
 
@@ -62,8 +44,7 @@ class ProviderPDF extends ChangeNotifier {
       await pdfRepository.deleteFilePdfAndModelDb(pdfModel: pdfModel);
       await updatePdfListModelHistory();
     } catch (e, s) {
-      print('Error delete: $e');
-      print('Error delete: $s');
+      log('Error deleteFilePdf: $e', stackTrace: s);
     }
   }
 
@@ -74,26 +55,18 @@ class ProviderPDF extends ChangeNotifier {
           await pdfRepository.deleteFilePdfAndModelDb(pdfModel: element!);
         }
       }
-      // await updatePdfListModelHistory();
-      // await updatePDFListModelFavourites();
     } catch (e, s) {
-      print('Error delete after compare: $e');
-      print('Error delete after compare: $s');
+      log('Error DeleteAfterCompare: $e', stackTrace: s);
     }
   }
 
   Future<void> updatePdfListModelHistory() async {
     try {
-      //  _setNotifierState(NotifierState.loading);
-
       pdfModelListHistory = await pdfRepository.getPdfListModelFromDbHistory();
-
-      // print('listLocalPdf 0 $localListPdf');
     } catch (e, s) {
-      print('Error updatePdfList: $e');
-      print('Error updatePdfList: $s');
+      log('Error updatePdfListModelHistory: $e', stackTrace: s);
     }
-    // _setNotifierState(NotifierState.loaded);
+
     notifyListeners();
   }
 
@@ -102,8 +75,7 @@ class ProviderPDF extends ChangeNotifier {
       await pdfRepository.updatePdfModel(pdfModel: newPdfModel);
       await updatePdfListModelHistory();
     } catch (e, s) {
-      print('Error updatePdfNameFile: $e');
-      print('Error updatePdfNameFile: $s');
+      log('Error updatePdfModelDb: $e', stackTrace: s);
     }
   }
 
@@ -112,8 +84,7 @@ class ProviderPDF extends ChangeNotifier {
     try {
       pageNumber = await pdfRepository.getNumberPages(pdfModel: pdfModel);
     } catch (e, s) {
-      print('Error getPageNumber: $e');
-      print('Error getPageNumber: $s');
+      log('Error getPageNumber: $e', stackTrace: s);
     }
     return pageNumber;
   }
@@ -123,8 +94,7 @@ class ProviderPDF extends ChangeNotifier {
       final newPdfModel = pdfModel.copyWith(pageNumber: pageNumber);
       await pdfRepository.updatePdfModel(pdfModel: newPdfModel);
     } catch (e, s) {
-      print('Error updatePageNumber: $e');
-      print('Error updatePageNumber: $s');
+      log('Error updatePageNumber: $e', stackTrace: s);
     }
   }
 }

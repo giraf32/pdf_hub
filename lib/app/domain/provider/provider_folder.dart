@@ -1,8 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:pdf_hub/app/domain/folder_api.dart';
 import 'package:pdf_hub/app/domain/model/folder_model.dart';
-
-
 
 enum NotifierStateFolder { initial, loading, loaded }
 
@@ -23,8 +23,7 @@ class ProviderFolder extends ChangeNotifier {
 
       listFolder = await folderRepository.getListFolder();
     } catch (e, s) {
-      print('Error updateListFolder: $e');
-      print('Error updateListFolder: $s');
+      log('Error updateListFolder: $e', stackTrace: s);
     }
     notifierStateFolder = NotifierStateFolder.loaded;
     notifyListeners();
@@ -34,8 +33,7 @@ class ProviderFolder extends ChangeNotifier {
     try {
       await folderRepository.insertFolder(folder: folder);
     } catch (e, s) {
-      print('Error saveFolder: $e');
-      print('Error saveFolder: $s');
+      log('Error saveFolder: $e', stackTrace: s);
     }
     updateListFolder();
   }
@@ -44,8 +42,7 @@ class ProviderFolder extends ChangeNotifier {
     try {
       await folderRepository.deleteFolder(id: id);
     } catch (e, s) {
-      print('Error deleteFolder: $e');
-      print('Error deleteFolder: $s');
+      log('Error deleteFolder: $e', stackTrace: s);
     }
     updateListFolder();
   }
@@ -54,8 +51,7 @@ class ProviderFolder extends ChangeNotifier {
     try {
       await folderRepository.updateFolder(folder: folder);
     } catch (e, s) {
-      print('Error updateFolder: $e');
-      print('Error updateFolder: $s');
+      log('Error updateFolder: $e', stackTrace: s);
     }
     updateListFolder();
   }

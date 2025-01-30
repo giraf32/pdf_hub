@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:pdf_hub/app/app_const.dart';
 import 'package:pdf_hub/app/data/db_app/db_services_folder.dart';
@@ -17,45 +16,54 @@ import 'app/domain/provider/provider_pdf.dart';
 
 //String settingsKeyFirstPages = 'firstPages';
 
-void main() async{
+void main() async {
   runZonedGuarded(() async {
     //  WidgetsFlutterBinding.ensureInitialized();
+
     await _initApp();
+
     Database? db = await InitDb.create().database;
-    final dbServicesFolder = DbServicesFolder(db: db!);
-    final dbServicesPdf = DbServicesPdf(db: db);
+    
+    if (db != null) {
+      final dbServicesFolder = DbServicesFolder(db: db);
+      final dbServicesPdf = DbServicesPdf(db: db);
 
-    final dependsRepo =
-        AppDepends(dbApiFolder: dbServicesFolder, dbApiPdf: dbServicesPdf);
+      final dependsRepo =
+          AppDepends(dbApiFolder: dbServicesFolder, dbApiPdf: dbServicesPdf);
 
-    await dependsRepo.init(
-      onError: (name, error, stackTrace) {
-        throw '$name: $error: $stackTrace';
-      },
-    );
-    runApp(
-      MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) =>
-                ProviderPDF(pdfRepository: dependsRepo.pdfRepo),
-          ),
-          ChangeNotifierProvider(
-            create: (context) =>
-                ProviderFolder(folderRepository: dependsRepo.folderRepo),
-          ),
-          ChangeNotifierProvider(
-            create: (context) =>
-                ProviderFolderPdf(pdfRepository: dependsRepo.folderPdfRepo),
-          )
-        ],
-        child: const MyApp(),
-      ),
-    );
+      await dependsRepo.init(
+        onError: (name, error, stackTrace) {
+          throw '$name: $error: $stackTrace';
+        },
+      );
+      runApp(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(
+              create: (context) =>
+                  ProviderPDF(pdfRepository: dependsRepo.pdfRepo),
+            ),
+            ChangeNotifierProvider(
+              create: (context) =>
+                  ProviderFolder(folderRepository: dependsRepo.folderRepo),
+            ),
+            ChangeNotifierProvider(
+              create: (context) =>
+                  ProviderFolderPdf(pdfRepository: dependsRepo.folderPdfRepo),
+            )
+          ],
+          child: const MyApp(),
+        ),
+      );
+    } else {
+      runApp(AppWithError(
+          message: ' База данных не найдена. \n Перезапустите приложение'));
+    }
   }, (error, stack) {
     log(error.toString(), stackTrace: stack, error: error);
-    runApp(AppWithError(message: '$error,$stack'));
+    runApp(AppWithError(message: '$error'));
   });
+
   WidgetsBinding.instance.addPostFrameCallback((_) {
     WidgetsBinding.instance.allowFirstFrame();
   });

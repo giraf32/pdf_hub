@@ -27,7 +27,7 @@ class AppDepends {
     try {
       await initFolderStart(dbApiFolder);
     } on Object catch (error, stackTrace) {
-      onError("foderStert", error, stackTrace);
+      onError("folderStert", error, stackTrace);
     }
     try {
       String? firstPage = await MySharedPreferences()
@@ -42,9 +42,8 @@ class AppDepends {
       onError("mySharedPreferences", error, stackTrace);
     }
     try {
-      // throw 'myError';
+      
       pdfRepo = PdfRepository(dbServicesPdf: dbApiPdf);
-     
     } on Object catch (error, stackTrace) {
       onError("pdfRepo", error, stackTrace);
     }

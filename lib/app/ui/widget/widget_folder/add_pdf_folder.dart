@@ -3,7 +3,6 @@ import 'package:pdf_hub/app/domain/model/pdf_model.dart';
 import 'package:pdf_hub/app/domain/provider/provider_folder_pdf.dart';
 import 'package:pdf_hub/app/ui/widget/widget_folder/change_check_box.dart';
 
-
 import 'package:provider/provider.dart';
 import '../../../domain/provider/provider_pdf.dart';
 
@@ -28,6 +27,7 @@ class _AddPdfFolderState extends State<AddPdfFolder> {
   @override
   Widget build(BuildContext context) {
     bool textButton = context.watch<ProviderFolderPdf>().isTextButton;
+    // final _context = context.read<ProviderFolderPdf>();
     return Container(
         height: 500,
         padding: const EdgeInsets.all(8.0),
@@ -56,7 +56,7 @@ class _AddPdfFolderState extends State<AddPdfFolder> {
                     flex: 4,
                     child: Text(
                       ' Файл не найден.\n Добавьте файл в приложение.',
-                      style: TextStyle(color: Colors.black, fontSize: 22),
+                      style: TextStyle(color: Colors.black, fontSize: 20),
                     )),
             SizedBox(
               height: 10,
@@ -78,13 +78,15 @@ class _AddPdfFolderState extends State<AddPdfFolder> {
                                 .read<ProviderFolderPdf>()
                                 .saveFileFolder(pdfListFavourites, context,
                                     widget.folderName);
-                            context
-                                .read<ProviderFolderPdf>()
-                                .clearListPdfAddFolder();
-                            Navigator.pop(context);
-                            context
-                                .read<ProviderFolderPdf>()
-                                .setTextButton(false);
+                            if (context.mounted) {
+                              context
+                                  .read<ProviderFolderPdf>()
+                                  .clearListPdfAddFolder();
+                              Navigator.pop(context);
+                              context
+                                  .read<ProviderFolderPdf>()
+                                  .setTextButton(false);
+                            }
                             // context.router.replace(FolderPdfRoute(nameFolder: widget.folderNam;
                           } else {
                             debugPrint(
@@ -98,7 +100,7 @@ class _AddPdfFolderState extends State<AddPdfFolder> {
                     : const Center(
                         child: Text(
                         'Выберите файл',
-                        style: TextStyle(fontSize: 22, color: Colors.red),
+                        style: TextStyle(fontSize: 20, color: Colors.red),
                       )))
           ],
         ));

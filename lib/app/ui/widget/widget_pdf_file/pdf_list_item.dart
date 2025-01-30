@@ -21,7 +21,10 @@ class PdfListItem extends StatelessWidget {
       elevation: 3,
       color: Theme.of(context).cardColor,
       child: ListTile(
-        subtitle: Text(pdfModel.dateTime.toString(),style: TextStyle(fontSize: 12),),
+        subtitle: Text(
+          pdfModel.dateTime.toString(),
+          style: TextStyle(fontSize: 12),
+        ),
         title: Text(
           pdfModel.name,
           style: TextStyle(fontSize: 14),
@@ -33,24 +36,17 @@ class PdfListItem extends StatelessWidget {
             ScaffoldMessenger.of(context)
                 .showSnackBar(const SnackBar(content: Text('Файл не найден')));
           } else {
-           // context.read<ProviderPDF>().appBarHide = false;
+            // context.read<ProviderPDF>().appBarHide = false;
             if (!context.mounted) return;
-           // OpenPdfRx().openPDFRoute(context, file!, pdfModel.name);
+            // OpenPdfRx().openPDFRoute(context, file!, pdfModel.name);
             context.router.push(PdfRx(file: file!, pdfModel: pdfModel));
-
           }
-
         },
-        trailing:
-        MenuButton(pdfModel: pdfModel),
+        trailing: MenuButton(pdfModel: pdfModel),
 
         leading: ShowsFirstPageCard(
           filePath: pdfModel.path,
         ),
-
-        onLongPress: () {
-          //TODO animation show date time , size.
-        },
       ),
     );
   }

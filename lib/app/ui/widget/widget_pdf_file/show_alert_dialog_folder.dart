@@ -3,10 +3,7 @@ import 'package:pdf_hub/app/domain/model/folder_model.dart';
 import 'package:pdf_hub/app/domain/model/pdf_model.dart';
 import 'package:pdf_hub/app/domain/provider/provider_pdf.dart';
 import 'package:provider/provider.dart';
-
-
 import '../../../domain/provider/provider_folder_pdf.dart';
-
 
 Future<void> showAlertDialogFolder(
     BuildContext context, FolderModel folder, List<PdfModel> listPdf) async {
@@ -16,36 +13,42 @@ Future<void> showAlertDialogFolder(
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
-      return  AlertDialog(
+      return AlertDialog(
         backgroundColor: Colors.white,
         title: Text(
           'Выбрана папка : $nameFolder ',
           style: TextStyle(fontSize: 18),
         ),
-       // content: Text(folder.nameFolder, style: TextStyle(fontSize: 22,color: Colors.red)),
+        // content: Text(folder.nameFolder, style: TextStyle(fontSize: 22,color: Colors.red)),
         actions: <Widget>[
           Row(
-           mainAxisAlignment: MainAxisAlignment.center,
-           crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
               TextButton(
-                  onPressed: () async{
-                   await provideFolder.saveFileFolder(
+                  onPressed: () async {
+                    await provideFolder.saveFileFolder(
                         listPdf, context, folder.nameFolder);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
 
-                    Navigator.pop(context);
                     // context.read<ProviderPDF>().addAndOpenPdf(context);
                   },
-                  child: const Text('копировать', style: TextStyle(fontSize: 16))),
+                  child:
+                      const Text('копировать', style: TextStyle(fontSize: 16))),
               TextButton(
                   onPressed: () async {
-                    await  provideFolder.saveFileFolder(
-                        listPdf, context,folder.nameFolder);
+                    await provideFolder.saveFileFolder(
+                        listPdf, context, folder.nameFolder);
                     await providerPdf.deleteFilePdf(listPdf.first);
 
-                    Navigator.pop(context);
-                   // context.router.replace(HomeRoute());
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+
+                    // context.router.replace(HomeRoute());
                   },
                   child: Text(
                     'переместить',
@@ -53,7 +56,6 @@ Future<void> showAlertDialogFolder(
                   )),
             ],
           ),
-
         ],
       );
     },

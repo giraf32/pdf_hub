@@ -11,23 +11,15 @@ class HistoryList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<ProviderPDF>(builder: (_, notifier, __) {
-      if (notifier.notifierState == NotifierState.loading) {
-        return const Center(
-          child: CircularProgressIndicator(),
+      if (notifier.pdfModelListHistory.isNotEmpty) {
+        return ListView(
+          children: notifier.pdfModelListHistory.map((e) {
+            return PdfListItem(pdfModel: e!);
+          }).toList(),
         );
       } else {
-        if(notifier.pdfModelListHistory.isNotEmpty){
-          return  ListView(
-            children: notifier.pdfModelListHistory.map((e) {
-              return PdfListItem(pdfModel: e!);
-            }).toList(),
-          );
-        } else {
-          return AnimatedText();
-        }
-
+        return AnimatedText();
       }
     });
   }

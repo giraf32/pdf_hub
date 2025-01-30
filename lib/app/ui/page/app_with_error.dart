@@ -9,8 +9,11 @@ class AppWithError extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Text(message),
+        body: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Center(
+            child: Text(message),
+          ),
         ),
       ),
     );

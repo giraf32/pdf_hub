@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:pdf_hub/app/domain/folder_pdf_api.dart';
 import '../../../utility/pdf_function.dart';
@@ -8,9 +10,7 @@ class ProviderFolderPdf extends ChangeNotifier {
   ProviderFolderPdf({required this.pdfRepository});
   final FolderPdfApi pdfRepository;
 
-  // final pdfRepository =
-  // FolderPdfRepository(dbServicesPdf: DbServicesPdf(InitDb.create()));
-
+ 
   var listPdfFileByNameFolder = <PdfModel?>[];
   var listPdfAdd = <PdfModel?>[];
   var listPdfAddFolder = <PdfModel?>[];
@@ -43,8 +43,7 @@ class ProviderFolderPdf extends ChangeNotifier {
       listPdfFileByNameFolder = await pdfRepository.getLisPdfByNameFolderFromDb(
           nameFolder: nameFolder);
     } catch (e, s) {
-      print('Error updateListFolderByName: $e');
-      print('Error updateListFolderByName: $s');
+      log('Error updateListFolderByName: $e', stackTrace: s);
     }
 
     notifyListeners();
@@ -53,8 +52,6 @@ class ProviderFolderPdf extends ChangeNotifier {
   Future<void> saveFileFolder(List<PdfModel?> listPdfModel,
       BuildContext context, String nameFolder) async {
     try {
-      print('nameFolderSaveFileFolder : $nameFolder');
-      print('pdfModelSaveFileFolder : $listPdfModel');
       final listFolder = await pdfRepository.getLisPdfByNameFolderFromDb(
           nameFolder: nameFolder);
 
@@ -71,8 +68,7 @@ class ProviderFolderPdf extends ChangeNotifier {
           listPdfModels: listPdfModel, nameFolder: nameFolder);
       await updateListFolderByName(nameFolder);
     } catch (e, s) {
-      print('Error savePdfFavourites: $e');
-      print('Error savePdfFavourites: $s');
+      log('Error savePdfFavourites: $e', stackTrace: s);
     }
   }
 
@@ -80,8 +76,7 @@ class ProviderFolderPdf extends ChangeNotifier {
     try {
       await pdfRepository.deletePdfModelByNameFolderFromDb(nameFolder: folder);
     } catch (e, s) {
-      print('Error deletePdfFolder: $e');
-      print('Error deletePdfFolder: $s');
+      log('Error deletePdfFolder: $e', stackTrace: s);
     }
 
     await updateListFolderByName(folder);
@@ -93,8 +88,7 @@ class ProviderFolderPdf extends ChangeNotifier {
       await pdfRepository.changeNameFolder(
           nameFolder: nameFolder, newNameFolder: newNameFolder);
     } catch (e, s) {
-      print('Error changePdfFolder: $e');
-      print('Error changePdfFolder: $s');
+      log('Error changePdfFolder: $e', stackTrace: s);
     }
   }
 
@@ -103,8 +97,7 @@ class ProviderFolderPdf extends ChangeNotifier {
       await pdfRepository.deleteFilePdfAndModelDb(pdfModel: pdfModel);
       await updateListFolderByName(pdfModel.folder);
     } catch (e, s) {
-      print('Error delete: $e');
-      print('Error delete: $s');
+      log('Error delete: $e', stackTrace: s);
     }
   }
 
@@ -113,8 +106,9 @@ class ProviderFolderPdf extends ChangeNotifier {
       await pdfRepository.updatePdfModelFolder(pdfModel: newPdfModel);
       await updateListFolderByName(newPdfModel.folder);
     } catch (e, s) {
-      print('Error updatePdfNameFile: $e');
-      print('Error updatePdfNameFile: $s');
+      log('Error updatePdfFolderModelDb: $e', stackTrace: s);
     }
   }
 }
+
+class Log {}
