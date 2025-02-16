@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:pdf_hub/app/domain/model/pdf_model.dart';
 import 'package:pdf_hub/app/settings/info_app.dart';
+import 'package:pdf_hub/app/ui/viewer_pdf/my_pdf_viewer.dart';
 import 'package:pdf_hub/app/ui/widget/widget_folder/folder_pdf_list.dart';
-
-import '../app/ui/viewer_pdf/pdf_rx.dart';
+ import '../app/ui/viewer_pdf/pdf_rx.dart';
 
 class OpenPdfRx {
   void openPDFRoute(BuildContext context, File file, PdfModel pdfModel) =>
@@ -13,6 +13,17 @@ class OpenPdfRx {
           builder: (context) => PdfRx(
                 file: file,
                 pdfModel: pdfModel,
+              )));
+}
+
+class OpenMyPdfViewer {
+  void openPDFRoute(
+    BuildContext context,
+    File file,
+  ) =>
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => MyPdfViewer(
+                file: file,
               )));
 }
 
