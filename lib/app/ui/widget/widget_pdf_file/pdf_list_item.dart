@@ -1,13 +1,14 @@
 import 'dart:io';
 
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 
 import 'package:pdf_hub/app/ui/widget/widget_pdf_file/menu_button.dart';
 import 'package:pdf_hub/app/ui/widget/widget_pdf_file/shows_first_page_card.dart';
 import 'package:pdf_hub/app_router/app_router.gr.dart';
-import 'package:pdf_hub/route/open_pdf.dart';
+//import 'package:pdf_hub/route/open_pdf.dart';
 import '../../../domain/model/pdf_model.dart';
 
 class PdfListItem extends StatelessWidget {
@@ -40,9 +41,9 @@ class PdfListItem extends StatelessWidget {
           } else {
             // context.read<ProviderPDF>().appBarHide = false;
             if (!context.mounted) return;
-            // OpenPdfRx().openPDFRoute(context, file!, pdfModel.name);
-           // context.router.push(PdfRx(file: file!, pdfModel: pdfModel));
-            OpenMyPdfViewer().openPDFRoute(context, file!);
+            // OpenPdfRx().openPDFRoute(context, file!, pdfModel);
+            context.router.push(PdfRx(file: file!, pdfModel: pdfModel));
+           // OpenMyPdfViewer().openPDFRoute(context, file!);
           }
         },
         trailing: MenuButton(pdfModel: pdfModel),

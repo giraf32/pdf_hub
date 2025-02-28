@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pdf_hub/app/domain/model/pdf_model.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:provider/provider.dart';
-
 import '../../domain/provider/provider_pdf.dart';
 
 @RoutePage()
@@ -91,6 +90,13 @@ class _PDFScreenState extends State<PdfRx> with WidgetsBindingObserver {
                   controller: controller,
                   initialPageNumber: snapshot.data!,
                   params: PdfViewerParams(
+                      // maxImageBytesCachedOnMemory: 10*1024*1024,
+                      enableTextSelection: true,
+                      // onTextSelectionChange: (selection) {
+                      //   final selectionText =
+                      //       ClipboardData(text: selection.toString());
+                      //   Clipboard.setData(selectionText);
+                      // },
                       onViewSizeChanged: (viewSize, oldViewSize, controller) {
                         if (oldViewSize != null) {
                           final centerPosition =
