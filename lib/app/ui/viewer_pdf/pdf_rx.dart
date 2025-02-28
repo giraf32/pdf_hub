@@ -21,7 +21,6 @@ class _PDFScreenState extends State<PdfRx> with WidgetsBindingObserver {
   final controller = PdfViewerController();
   ProviderPDF? providerPdf;
 
-  
   @override
   void initState() {
     super.initState();
@@ -114,17 +113,17 @@ class _PDFScreenState extends State<PdfRx> with WidgetsBindingObserver {
                                           Icons.dehaze,
                                           color: Colors.black,
                                         ),
-                                        GestureDetector(
-                                          behavior: HitTestBehavior.translucent,
-                                          onDoubleTap: () {
-                                            controller.zoomUp();
-                                          },
-                                        )
                                       ],
                                     ),
                                   ),
                                 );
                               }),
+                          GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onDoubleTap: () {
+                              controller.zoomUp();
+                            },
+                          )
                         ]),
               );
             } else {
