@@ -15,7 +15,6 @@ class OpenPdfRx {
                 pdfModel: pdfModel,
               )));
 }
-
 // class OpenPdfScreenHome {
 //   void openPDFRoute(BuildContext context) => Navigator.of(context).push(
 //       MaterialPageRoute(builder: (context) => HistoryPagePdf(title: 'Home')));

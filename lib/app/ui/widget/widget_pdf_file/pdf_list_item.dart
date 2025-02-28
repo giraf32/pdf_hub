@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-
 import 'package:pdf_hub/app/ui/widget/widget_pdf_file/menu_button.dart';
 import 'package:pdf_hub/app/ui/widget/widget_pdf_file/shows_first_page_card.dart';
 import 'package:pdf_hub/app_router/app_router.gr.dart';
@@ -40,6 +38,7 @@ class PdfListItem extends StatelessWidget {
             if (!context.mounted) return;
             // OpenPdfRx().openPDFRoute(context, file!, pdfModel.name);
             context.router.push(PdfRx(file: file!, pdfModel: pdfModel));
+           // OpenPdfRxOnePage().openPDFRoute(context, file!);
           }
         },
         trailing: MenuButton(pdfModel: pdfModel),

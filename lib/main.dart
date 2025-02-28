@@ -18,9 +18,9 @@ import 'app/domain/provider/provider_pdf.dart';
 
 void main() async {
   runZonedGuarded(() async {
-    //  WidgetsFlutterBinding.ensureInitialized();
+    WidgetsFlutterBinding.ensureInitialized();
 
-    await _initApp();
+   // await _initApp();
 
     Database? db = await InitDb.create().database;
     
@@ -64,15 +64,15 @@ void main() async {
     runApp(AppWithError(message: '$error'));
   });
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    WidgetsBinding.instance.allowFirstFrame();
-  });
+  // WidgetsBinding.instance.addPostFrameCallback((_) {
+  //   WidgetsBinding.instance.allowFirstFrame();
+  // });
 }
 
-Future<void> _initApp() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  WidgetsBinding.instance.deferFirstFrame();
-}
+// Future<void> _initApp() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   WidgetsBinding.instance.deferFirstFrame();
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
