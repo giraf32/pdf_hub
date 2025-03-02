@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:pdf_hub/app/domain/model/pdf_model.dart';
 import 'package:pdfrx/pdfrx.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../domain/provider/provider_pdf.dart';
 
 @RoutePage()
@@ -69,6 +70,19 @@ class _PDFScreenState extends State<PdfRx> with WidgetsBindingObserver {
                 controller: controller,
                 initialPageNumber: snapshot.data!,
                 params: PdfViewerParams(
+                    enableTextSelection: true,
+                    linkHandlerParams: PdfLinkHandlerParams(
+                      linkColor: Colors.grey.withAlpha(10),
+                      onLinkTap: (link) {
+                        // handle URL or Dest
+                        if (link.url != null) {
+                          // to do so or validating the link destination
+                          _shouldOpenUrl(context, link.url!);
+                        } else if (link.dest != null) {
+                          controller.goToDest(link.dest);
+                        }
+                      },
+                    ),
                     onViewSizeChanged: (viewSize, oldViewSize, controller) {
                       if (oldViewSize != null) {
                         final centerPosition =
@@ -131,5 +145,46 @@ class _PDFScreenState extends State<PdfRx> with WidgetsBindingObserver {
             }
           }),
     );
+  }
+
+  Future<bool> _shouldOpenUrl(BuildContext context, Uri url) async {
+    final result = await showDialog<bool?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Navigate to URL?'),
+          content: SelectionArea(
+            child: Text.rich(
+              TextSpan(
+                children: [
+                  const TextSpan(
+                      text: 'Вы точно хотите перейти по этой ссылке?\n'),
+                  TextSpan(
+                    text: url.toString(),
+                    style: const TextStyle(color: Colors.blue),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('отмена'),
+            ),
+            TextButton(
+              // onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () {
+                launchUrl(url);
+                Navigator.of(context).pop(true);
+              },
+              child: const Text('перейти'),
+            ),
+          ],
+        );
+      },
+    );
+    return result ?? false;
   }
 }
